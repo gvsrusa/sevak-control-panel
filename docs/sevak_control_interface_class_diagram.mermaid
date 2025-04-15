@@ -1,0 +1,164 @@
+classDiagram
+    class User {
+        +int id
+        +string name
+        +string phoneNumber
+        +string language
+        +string role
+        +authenticate(credentials): boolean
+        +updateProfile(profileData): User
+        +getPreferences(): UserPreferences
+    }
+
+    class UserPreferences {
+        +string language
+        +boolean darkMode
+        +boolean voiceControlEnabled
+        +NotificationSettings notifications
+        +savePreferences(): boolean
+        +updateLanguage(language): boolean
+    }
+
+    class TractorController {
+        +int tractorId
+        +moveForward(speed): ControlResponse
+        +moveBackward(speed): ControlResponse
+        +turnLeft(angle): ControlResponse
+        +turnRight(angle): ControlResponse
+        +startOperation(operationType): ControlResponse
+        +stopOperation(): ControlResponse
+        +emergencyStop(): ControlResponse
+        +getStatus(): TractorStatus
+    }
+
+    class TractorStatus {
+        +string operationMode
+        +float batteryLevel
+        +Location currentLocation
+        +float speed
+        +boolean cutterActive
+        +boolean loaderActive
+        +boolean transporterActive
+        +boolean isMoving
+        +Diagnostics diagnostics
+        +isOperational(): boolean
+        +getEstimatedRuntime(): number
+    }
+
+    class Location {
+        +float latitude
+        +float longitude
+        +float elevation
+        +string address
+        +getDistanceFrom(Location): float
+        +isWithinBoundary(Boundary): boolean
+    }
+
+    class Boundary {
+        +Array~Location~ points
+        +string name
+        +string boundaryType
+        +addPoint(Location): void
+        +removePoint(int): void
+        +containsLocation(Location): boolean
+    }
+
+    class Task {
+        +int id
+        +string name
+        +string operationType
+        +Boundary operationArea
+        +DateTime scheduledTime
+        +DateTime completedTime
+        +string status
+        +float completionPercentage
+        +reschedule(DateTime): boolean
+        +cancel(): boolean
+        +markComplete(): boolean
+    }
+
+    class Schedule {
+        +int id
+        +Array~Task~ tasks
+        +addTask(Task): Task
+        +removeTask(int): boolean
+        +getUpcomingTasks(int limit): Array~Task~
+        +rescheduleTask(int taskId, DateTime): boolean
+    }
+
+    class CommunicationManager {
+        +establishConnection(): ConnectionStatus
+        +sendCommand(Command): CommandResponse
+        +receiveUpdates(): TractorStatus
+        +isConnected(): boolean
+        +reconnect(): ConnectionStatus
+    }
+
+    class OfflineManager {
+        +Array~Command~ pendingCommands
+        +Array~TractorStatus~ statusHistory
+        +queueCommand(Command): boolean
+        +syncWithServer(): SyncResult
+        +saveOfflineData(): boolean
+        +loadOfflineData(): boolean
+    }
+
+    class MapManager {
+        +Array~Boundary~ boundaries
+        +Location tractorLocation
+        +Array~MapTile~ offlineTiles
+        +displayMap(): void
+        +updateTractorPosition(Location): void
+        +addBoundary(Boundary): void
+        +downloadOfflineTiles(Boundary): Promise
+    }
+
+    class NotificationManager {
+        +Array~Notification~ notifications
+        +createNotification(message, type): Notification
+        +dismissNotification(id): boolean
+        +getActiveNotifications(): Array~Notification~
+    }
+
+    class Diagnostics {
+        +Array~Alert~ alerts
+        +Map~string, string~ systemReadings
+        +DateTime lastMaintenance
+        +getAlerts(): Array~Alert~
+        +getSystemHealth(): SystemHealth
+        +scheduleMaintenance(DateTime): boolean
+    }
+
+    class Analytics {
+        +recordOperation(OperationData): boolean
+        +calculateEfficiency(): EfficiencyMetrics
+        +generateUsageReport(): UsageReport
+        +trackBatteryConsumption(): BatteryMetrics
+    }
+
+    class AuthManager {
+        +login(credentials): AuthResult
+        +logout(): boolean
+        +verifyToken(): boolean
+        +refreshToken(): string
+        +generateOTP(phoneNumber): boolean
+    }
+
+    class WeatherService {
+        +getCurrentWeather(Location): Weather
+        +getForecast(Location, days): Array~Weather~
+        +isOperationalWeather(): boolean
+    }
+
+    User "1" -- "1" UserPreferences: has
+    User "1" -- "*" Task: schedules
+    User "1" -- "1" Schedule: owns
+    TractorController "1" -- "1" TractorStatus: controls
+    TractorStatus "1" -- "1" Location: has
+    TractorStatus "1" -- "1" Diagnostics: includes
+    Task "*" -- "1" Boundary: operates within
+    Schedule "1" -- "*" Task: contains
+    CommunicationManager -- TractorController: sends commands to
+    OfflineManager -- CommunicationManager: syncs with
+    MapManager "1" -- "*" Boundary: displays
+    MapManager -- Location: tracks
