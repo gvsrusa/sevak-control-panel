@@ -1,39 +1,60 @@
-# React + Vite Template
+# Sevak Mini Tractor Control Panel
 
-A modern React template for web applications and games, featuring React 18, Vite, TailwindCSS, and Material UI.
+Sevak is an autonomous electric mini tractor designed for rural areas in India, specifically for cutting fodder, loading it into an attached trailer, and transporting it to livestock areas.
+
+## Features
+
+- Autonomous operation
+- Remote control via mobile app
+- Electric powertrain
+- Fodder cutting and collection system
+- Trailer attachment for transport
+- Real-time telemetry and monitoring
 
 ## Project Structure
 
 ```
-├── src/
-│   ├── App.jsx          # Main application component
-│   ├── main.jsx         # Application entry point
-│   └── index.css        # Global styles (Tailwind)
-├── public/              # Static assets
-├── index.html           # HTML template
-├── vite.config.js       # Vite configuration
-├── tailwind.config.js   # Tailwind configuration
-├── postcss.config.js    # PostCSS configuration
-└── eslint.config.js     # ESLint configuration
+sevak-control-panel/
+├── backend/           # Backend server for tractor control
+├── mobile-app/        # Mobile application for remote control
+├── hardware/          # Hardware control code and specifications
+└── docs/             # Documentation and specifications
 ```
 
-## Development Guidelines
+## Setup Instructions
 
-- Modify `index.html` and `src/App.jsx` as needed
-- Create new folders or files in `src/` directory as needed
-- Style components using TailwindCSS utility classes
-- Avoid modifying `src/main.jsx` and `src/index.css`
-- Only modify `vite.config.js` if absolutely necessary
+### Prerequisites
 
-## Available Scripts
-- `pnpm install` - Install dependencies
-- `pnpm run dev` - Start development server
-- `pnpm run lint` - Lint source files
+- Node.js (v18 or higher)
+- Python 3.9+
+- Android Studio (for mobile app development)
+- ROS2 (for hardware control)
 
-## Tech Stack
+### Installation
 
-- React
-- Vite
-- TailwindCSS
-- ESLint
-- Javascript
+1. Clone the repository
+2. Install backend dependencies:
+   ```bash
+   cd backend
+   npm install
+   ```
+3. Install mobile app dependencies:
+   ```bash
+   cd mobile-app
+   npm install
+   ```
+4. Install hardware control dependencies:
+   ```bash
+   cd hardware
+   pip install -r requirements.txt
+   ```
+
+## Development
+
+- Backend: `cd backend && npm run dev`
+- Mobile App: `cd mobile-app && npm run android`
+- Hardware Control: `cd hardware && python main.py`
+
+## License
+
+MIT License 
