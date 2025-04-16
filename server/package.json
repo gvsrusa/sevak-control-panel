@@ -1,0 +1,31 @@
+{
+  "name": "sevak-server",
+  "version": "1.0.0",
+  "description": "Sevak Control Panel Server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "setup": "node scripts/setup-oauth.js",
+    "test": "mocha tests/**/*.test.js --timeout 10000"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0",
+    "jsonwebtoken": "^9.0.1",
+    "google-auth-library": "^8.9.0",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "winston": "^3.10.0",
+    "joi": "^17.9.2",
+    "express-rate-limit": "^6.9.0",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7"
+  }
+} 
