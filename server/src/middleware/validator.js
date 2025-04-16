@@ -7,15 +7,29 @@ const schemas = {
   createUser: Joi.object({
     name: Joi.string().required().min(2).max(50),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(6),
-    role: Joi.string().valid('user', 'admin').default('user')
+    password: Joi.string().required().min(8).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])')),
+    role: Joi.string().valid('user', 'admin').default('user'),
+    phone: Joi.string().pattern(new RegExp('^[0-9]{10}$')).optional(),
+    address: Joi.object({
+      street: Joi.string(),
+      city: Joi.string(),
+      state: Joi.string(),
+      zipCode: Joi.string().pattern(new RegExp('^[0-9]{5}$'))
+    }).optional()
   }),
 
   updateUser: Joi.object({
     name: Joi.string().min(2).max(50),
     email: Joi.string().email(),
-    password: Joi.string().min(6),
-    role: Joi.string().valid('user', 'admin')
+    password: Joi.string().min(8).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])')),
+    role: Joi.string().valid('user', 'admin'),
+    phone: Joi.string().pattern(new RegExp('^[0-9]{10}$')),
+    address: Joi.object({
+      street: Joi.string(),
+      city: Joi.string(),
+      state: Joi.string(),
+      zipCode: Joi.string().pattern(new RegExp('^[0-9]{5}$'))
+    })
   }).min(1),
 
   // Auth schemas
@@ -25,7 +39,9 @@ const schemas = {
   }),
 
   resetPassword: Joi.object({
-    email: Joi.string().required().email()
+    email: Joi.string().required().email(),
+    token: Joi.string().required(),
+    newPassword: Joi.string().required().min(8).pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'))
   }),
 
   // Device schemas
@@ -34,9 +50,15 @@ const schemas = {
     type: Joi.string().required().valid('tractor', 'controller'),
     status: Joi.string().valid('active', 'inactive', 'maintenance').default('active'),
     location: Joi.object({
-      latitude: Joi.number().required(),
-      longitude: Joi.number().required()
-    })
+      latitude: Joi.number().required().min(-90).max(90),
+      longitude: Joi.number().required().min(-180).max(180)
+    }),
+    metadata: Joi.object({
+      model: Joi.string(),
+      manufacturer: Joi.string(),
+      serialNumber: Joi.string(),
+      firmwareVersion: Joi.string()
+    }).optional()
   }),
 
   updateDevice: Joi.object({
@@ -44,40 +66,111 @@ const schemas = {
     type: Joi.string().valid('tractor', 'controller'),
     status: Joi.string().valid('active', 'inactive', 'maintenance'),
     location: Joi.object({
-      latitude: Joi.number(),
-      longitude: Joi.number()
+      latitude: Joi.number().min(-90).max(90),
+      longitude: Joi.number().min(-180).max(180)
+    }),
+    metadata: Joi.object({
+      model: Joi.string(),
+      manufacturer: Joi.string(),
+      serialNumber: Joi.string(),
+      firmwareVersion: Joi.string()
     })
   }).min(1),
 
   // Sensor schemas
   createSensor: Joi.object({
     deviceId: Joi.string().required(),
-    type: Joi.string().required().valid('temperature', 'battery', 'location'),
+    type: Joi.string().required().valid('temperature', 'battery', 'location', 'humidity', 'pressure'),
     name: Joi.string().required().min(2).max(50),
     status: Joi.string().valid('active', 'inactive', 'maintenance').default('active'),
-    threshold: Joi.number()
+    threshold: Joi.object({
+      min: Joi.number(),
+      max: Joi.number()
+    }).optional(),
+    calibration: Joi.object({
+      offset: Joi.number(),
+      multiplier: Joi.number()
+    }).optional(),
+    metadata: Joi.object({
+      unit: Joi.string(),
+      precision: Joi.number(),
+      samplingRate: Joi.number()
+    }).optional()
   }),
 
   updateSensor: Joi.object({
-    type: Joi.string().valid('temperature', 'battery', 'location'),
+    type: Joi.string().valid('temperature', 'battery', 'location', 'humidity', 'pressure'),
     name: Joi.string().min(2).max(50),
     status: Joi.string().valid('active', 'inactive', 'maintenance'),
-    threshold: Joi.number()
+    threshold: Joi.object({
+      min: Joi.number(),
+      max: Joi.number()
+    }),
+    calibration: Joi.object({
+      offset: Joi.number(),
+      multiplier: Joi.number()
+    }),
+    metadata: Joi.object({
+      unit: Joi.string(),
+      precision: Joi.number(),
+      samplingRate: Joi.number()
+    })
   }).min(1),
 
+  // Reading schemas
   createReading: Joi.object({
     sensorId: Joi.string().required(),
     value: Joi.number().required(),
-    timestamp: Joi.date().default(Date.now)
+    timestamp: Joi.date().default(Date.now),
+    metadata: Joi.object({
+      quality: Joi.number().min(0).max(100),
+      confidence: Joi.number().min(0).max(1),
+      source: Joi.string()
+    }).optional()
+  }),
+
+  // Alert schemas
+  createAlert: Joi.object({
+    deviceId: Joi.string().required(),
+    sensorId: Joi.string().required(),
+    type: Joi.string().required().valid('threshold', 'anomaly', 'status'),
+    severity: Joi.string().required().valid('low', 'medium', 'high', 'critical'),
+    message: Joi.string().required(),
+    metadata: Joi.object({
+      threshold: Joi.number(),
+      expectedValue: Joi.number(),
+      actualValue: Joi.number()
+    }).optional()
+  }),
+
+  // Notification schemas
+  createNotification: Joi.object({
+    userId: Joi.string().required(),
+    type: Joi.string().required().valid('alert', 'system', 'maintenance'),
+    title: Joi.string().required(),
+    message: Joi.string().required(),
+    priority: Joi.string().valid('low', 'medium', 'high'),
+    metadata: Joi.object({
+      alertId: Joi.string(),
+      deviceId: Joi.string(),
+      actionRequired: Joi.boolean()
+    }).optional()
   })
 };
 
 // Validation middleware
 const validate = (schema) => {
   return (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate(req.body, {
+      abortEarly: false,
+      stripUnknown: true
+    });
+    
     if (error) {
-      return res.error(error.details[0].message, 400);
+      const errorMessage = error.details
+        .map(detail => detail.message)
+        .join(', ');
+      return res.error(errorMessage, 400);
     }
     next();
   };
@@ -90,14 +183,13 @@ const validateQuery = (schema) => {
       abortEarly: false,
       stripUnknown: true
     });
-
+    
     if (error) {
       const errorMessage = error.details
         .map(detail => detail.message)
         .join(', ');
-      throw new AppError(errorMessage, 400);
+      return res.error(errorMessage, 400);
     }
-
     next();
   };
 };
@@ -109,14 +201,13 @@ const validateParams = (schema) => {
       abortEarly: false,
       stripUnknown: true
     });
-
+    
     if (error) {
       const errorMessage = error.details
         .map(detail => detail.message)
         .join(', ');
-      throw new AppError(errorMessage, 400);
+      return res.error(errorMessage, 400);
     }
-
     next();
   };
 };
