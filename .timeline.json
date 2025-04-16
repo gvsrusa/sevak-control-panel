@@ -138,13 +138,22 @@
   "preview_servers": {
     "eb1ac231-58d4-42a4-bd7e-637efc71e8e3": {
       "role": "Alex",
-      "port": 5180,
+      "port": 5173,
       "subdomain": "sevak-control-interface-o8od4-5a397-71e8e3",
       "server": "6748db7f-3141-4dc4-80a4-c06b66484767",
       "cmd": "cd /data/chats/5a397/workspace && pnpm run dev",
       "timeline_index": 79,
-      "status": "success",
-      "logs": []
+      "status": "initializing",
+      "logs": [
+        "\n",
+        "\n",
+        "> react-template@0.0.0 dev /data/chats/5a397/workspace\n",
+        "> vite\n",
+        "\n",
+        "\n",
+        "  VITE v5.4.3  ready in 727 ms\n",
+        "\n"
+      ]
     }
   },
   "deploy": {}
