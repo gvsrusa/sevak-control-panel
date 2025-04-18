@@ -103,12 +103,22 @@ const Schedule = () => {
         <h1 className="text-2xl font-bold text-gray-800">
           {translations.schedule[language]}
         </h1>
-        <Button 
-          onClick={handleNewTask}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          {translations.newTask[language]}
-        </Button>
+        <div className="flex gap-3">
+          {filteredTasks.length === 0 && (
+            <Button 
+              onClick={handleNewTask}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3"
+            >
+              {translations.createFirstTask[language]}
+            </Button>
+          )}
+          <Button 
+            onClick={handleNewTask}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3"
+          >
+            {translations.newTask[language]}
+          </Button>
+        </div>
       </div>
       
       {/* View mode tabs */}
@@ -117,7 +127,7 @@ const Schedule = () => {
           <button
             key={mode}
             onClick={() => setViewMode(mode)}
-            className={`py-2 px-4 font-medium ${
+            className={`py-3 px-6 font-medium ${
               viewMode === mode
                 ? 'border-b-2 border-blue-500 text-blue-600'
                 : 'text-gray-500 hover:text-gray-700'
@@ -152,12 +162,6 @@ const Schedule = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <p className="text-gray-500 mb-4">{translations.noTasks[language]}</p>
-            <Button 
-              onClick={handleNewTask}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              {translations.createFirstTask[language]}
-            </Button>
           </div>
         )}
       </div>
@@ -174,11 +178,11 @@ const Schedule = () => {
             <div className="mt-6 flex justify-end space-x-3">
               <Button 
                 onClick={() => setShowNewTaskModal(false)}
-                className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3"
               >
                 Cancel
               </Button>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3">
                 Save
               </Button>
             </div>

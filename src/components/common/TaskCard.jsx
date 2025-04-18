@@ -153,7 +153,7 @@ const TaskCard = ({
         {status === 'scheduled' && (
           <Button 
             onClick={() => onStart(id)}
-            className="bg-green-600 hover:bg-green-700 text-white text-sm py-1 px-3"
+            className="bg-green-600 hover:bg-green-700 text-white text-sm py-2 px-4"
           >
             {translations.start[language]}
           </Button>
@@ -161,14 +161,14 @@ const TaskCard = ({
         
         <Button 
           onClick={() => onEdit(id)}
-          className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm py-1 px-3"
+          className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm py-2 px-4"
         >
           {translations.edit[language]}
         </Button>
         
         <Button 
           onClick={() => onDelete(id)}
-          className="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 text-sm py-1 px-3"
+          className="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 text-sm py-2 px-4"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

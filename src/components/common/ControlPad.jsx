@@ -45,7 +45,7 @@ const ControlPad = ({ onDirectionChange, onSpeedChange, disabled, className }) =
             className={`
               ${positionClasses[btn.direction]} 
               ${activeDirection === btn.direction ? 'bg-blue-700 ring-2 ring-blue-500' : 'bg-blue-500'} 
-              text-white h-16 w-16 flex items-center justify-center rounded-full
+              text-white h-16 w-16 flex items-center justify-center rounded-full p-4
               ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}
             `}
             disabled={disabled}

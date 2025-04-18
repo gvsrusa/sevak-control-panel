@@ -73,7 +73,7 @@ const QuickActions = ({ className }) => {
             key={button.id}
             onClick={button.action}
             disabled={isTractorBusy && button.id !== 'scheduleTask'}
-            className="bg-blue-50 hover:bg-blue-100 text-blue-700 h-20 flex flex-col items-center justify-center"
+            className="bg-blue-50 hover:bg-blue-100 text-blue-700 h-20 flex flex-col items-center justify-center p-4"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={button.icon} />
